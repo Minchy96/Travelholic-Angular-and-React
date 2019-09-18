@@ -3,6 +3,7 @@ package pmf.mina.bjelica.travelholic.controllers;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -27,23 +28,23 @@ import pmf.mina.bjelica.travelholic.service.StorageService;
 
 @Controller
 @RequestMapping("/post")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class PostApi {
 
 	@Autowired
 	PostService postService;
-	
+
 	@Autowired
 	StorageService storageService;
 
 	@RequestMapping(method = RequestMethod.POST, value = "/search")
 	public ResponseEntity<?> search(@RequestBody SearchDto searchDto) {
 
-		 List<Post> posts = postService.getPostsByFilter(searchDto);
-		 
-		return new ResponseEntity<Object>(posts,HttpStatus.OK);
+		List<Post> posts = postService.getPostsByFilter(searchDto);
+
+		return new ResponseEntity<Object>(posts, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/get/id/{idPost}")
 	public ResponseEntity<?> getPost(@PathVariable Integer idPost) {
 		System.out.println("usao");
@@ -97,47 +98,49 @@ public class PostApi {
 		return new ResponseEntity<Object>(posts, HttpStatus.OK);
 	}
 
-	
 	@RequestMapping(method = RequestMethod.GET, value = "/favourite/{username}/{postId}")
 	public ResponseEntity<?> favourite(@PathVariable String username, @PathVariable Integer postId) {
 
-		 boolean ok = postService.addFavourite(username,postId);
-		 
-		return new ResponseEntity<Object>(ok,HttpStatus.OK);
+		boolean ok = postService.addFavourite(username, postId);
+
+		return new ResponseEntity<Object>(ok, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/getFavourite/{username}")
 	public ResponseEntity<?> getFavourite(@PathVariable String username) {
 
 		List<Post> posts = postService.getFavourite(username);
-		 
-		return new ResponseEntity<Object>(posts,HttpStatus.OK);
+
+		return new ResponseEntity<Object>(posts, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/removeFavourite/{username}/{postId}")
 	public ResponseEntity<?> removeFavourite(@PathVariable String username, @PathVariable Integer postId) {
 
-		 boolean ok = postService.removeFavourite(username,postId);
-		 
-		return new ResponseEntity<Object>(ok,HttpStatus.OK);
+		boolean ok = postService.removeFavourite(username, postId);
+
+		return new ResponseEntity<Object>(ok, HttpStatus.OK);
 	}
+
 	@RequestMapping(method = RequestMethod.POST, value = "/uploadImage/{id}")
 	public ResponseEntity<?> userUpdate(@RequestBody MultipartFile file, @PathVariable Integer id) {
 		String message = "";
+		System.out.println(file.getOriginalFilename() + " hej!");
 		try {
+			System.out.println(file.getOriginalFilename() + " hej!");
 			storageService.store(file);
-			postService.saveImage(file.getOriginalFilename(),id);
-			message = "You successfully uploaded " + file.getOriginalFilename() + "!";
+			postService.saveImage(file.getOriginalFilename(), id);
+			message = "You successfully uploaded !";
 			return ResponseEntity.status(HttpStatus.OK).body(message);
 		} catch (Exception e) {
-			message = "FAIL to upload " + file.getOriginalFilename() + "!";
+			message = "FAIL to upload !";
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
 		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/getImage/{fileName}")
 	public ResponseEntity<?> getImage(@PathVariable String fileName) {
-		System.out.println("Ovde sam");
+		System.out.println("Ovde sam usaooo");
 		String encodeBase64 = null;
 		String image = null;
 		String mediaType = null;
@@ -150,7 +153,7 @@ public class PostApi {
 			encodeBase64 = Base64.getEncoder().encodeToString(bytesArray);
 			mediaType = Files.probeContentType(file.toPath());
 			System.out.println(mediaType);
-			image = "data:"+mediaType+";base64," + encodeBase64;
+			image = "data:" + mediaType + ";base64," + encodeBase64;
 			fis.close();
 			return new ResponseEntity<String>(image, HttpStatus.OK);
 		} catch (Exception e) {

@@ -57,14 +57,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int login(LoginDto loginDto) {
+	public User login(LoginDto loginDto) {
 		User u = userRepo.findUserByUsername(loginDto.getUsername());
 		if (u == null)
-			return 1;
+			return null;
 		if (u.getPassword().equals(loginDto.getPassword()))
-			return 0;
+			return u;
 		else
-			return 1;
+			return null;
 	}
 
 	@Override
@@ -127,6 +127,19 @@ public class UserServiceImpl implements UserService {
 			return true;
 		}catch (Exception e) {
 			return false;
+		}
+	}
+
+	@Override
+	public List<User> findBy(String name) {
+		String[] user = name.split(" ");
+		for (String string : user) {
+			System.out.println(string+" evoooooo");
+		}
+		if (user.length == 1) {
+			return userRepo.getByFirstName(user[0]);
+		} else {
+			return userRepo.getByFirstNameOrLastName(user[0], user[1]);
 		}
 	}
 

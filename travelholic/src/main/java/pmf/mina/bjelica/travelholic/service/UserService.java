@@ -12,7 +12,7 @@ public interface UserService {
 
 	List<User> findAll();
 
-	int login(LoginDto loginDto);
+	User login(LoginDto loginDto);
 
 	User get(String username);
 
@@ -21,6 +21,8 @@ public interface UserService {
 	boolean tryUsername(String username);
 
 	boolean setImage(String imageName, String username);
+
+	List<User> findBy(String name);
 
 
 }

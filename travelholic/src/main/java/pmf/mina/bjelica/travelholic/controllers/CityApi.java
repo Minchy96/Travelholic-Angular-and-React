@@ -17,7 +17,7 @@ import pmf.mina.bjelica.travelholic.service.CityService;
 
 @Controller
 @RequestMapping(value="/city")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class CityApi {
 	
 	@Autowired

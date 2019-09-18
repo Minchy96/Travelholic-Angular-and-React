@@ -16,7 +16,7 @@ import pmf.mina.bjelica.travelholic.service.CommentService;
 
 @Controller
 @RequestMapping(value="/comment")
-@CrossOrigin(origins="http://localhost:4200")
+@CrossOrigin(origins="*")
 public class CommentApi {
 	
 	@Autowired

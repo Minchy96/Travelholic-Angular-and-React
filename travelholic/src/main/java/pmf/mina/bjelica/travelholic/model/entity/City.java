@@ -25,8 +25,6 @@ public class City implements Serializable {
 
 	private String name;
 
-	private String zipcode;
-
 	//bi-directional many-to-one association to Country
 	@JsonManagedReference
 	@ManyToOne
@@ -54,14 +52,6 @@ public class City implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getZipcode() {
-		return this.zipcode;
-	}
-
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
 	}
 
 	public Country getCountry() {

@@ -20,4 +20,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	
 	@Query("SELECT u.posts1 FROM User u WHERE u.username LIKE :username")
 	List<Post> findUsersFavourite(@Param("username") String username);
+	
+	@Query("SELECT u FROM User u WHERE u.firstName LIKE :firstName")
+	List<User> getByFirstName(String firstName);
+	
+	@Query("SELECT u FROM User u WHERE u.firstName LIKE :firstName OR u.lastName LIKE :lastName")
+	List<User> getByFirstNameOrLastName(String firstName, String lastName);
 }

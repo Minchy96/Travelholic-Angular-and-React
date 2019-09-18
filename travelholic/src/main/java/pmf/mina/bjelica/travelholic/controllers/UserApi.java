@@ -6,12 +6,13 @@ import java.nio.file.Files;
 import java.util.Base64;
 import java.util.List;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +22,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
+import pmf.mina.bjelica.travelholic.model.dto.EmailDto;
 import pmf.mina.bjelica.travelholic.model.dto.LoginDto;
 import pmf.mina.bjelica.travelholic.model.dto.UserDto;
 import pmf.mina.bjelica.travelholic.model.entity.User;
+import pmf.mina.bjelica.travelholic.service.EmailService;
 import pmf.mina.bjelica.travelholic.service.StorageService;
 import pmf.mina.bjelica.travelholic.service.UserService;
 
 @Controller
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class UserApi {
 
 	@Autowired
@@ -37,11 +40,22 @@ public class UserApi {
 
 	@Autowired
 	StorageService storageService;
-
+	
+	@Autowired
+	EmailService emailService;
+	
+	private Logger logger = LoggerFactory.getLogger(UserApi.class);
+	
 	@GetMapping("/all")
 	public ResponseEntity<List<User>> getAllUsers() {
 		return ResponseEntity.ok(userService.findAll());
 	}
+	
+	@GetMapping("/all/{name}")
+	public ResponseEntity<List<User>> getUsers(@PathVariable String name) {
+		return ResponseEntity.ok(userService.findBy(name));
+	}
+
 
 	@RequestMapping(method = RequestMethod.POST, value = "/save")
 	public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) {
@@ -56,10 +70,16 @@ public class UserApi {
 	public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
 		System.out.println("usao");
 
-		int eq = userService.login(loginDto);
-		System.out.println(eq);
+		User u = userService.login(loginDto);
+		boolean ok = true;
+		if (u == null) {
+			System.out.println("null je");
+			ok = false;
+		} else {
+			System.out.println("Nije null");
+		}
 
-		return new ResponseEntity<Object>(eq, HttpStatus.OK);
+		return new ResponseEntity<Object>(ok, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/get/{username}")
@@ -85,14 +105,18 @@ public class UserApi {
 		System.out.println("usao");
 
 		boolean ok = userService.tryUsername(username);
-
-		return new ResponseEntity<Object>(ok, HttpStatus.OK);
+		System.out.println(ok);
+		return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/uploadImage/{username}")
 	public ResponseEntity<?> userUpdate(@RequestBody MultipartFile file, @PathVariable String username) {
 		String message = "";
 		try {
+			if(file == null) {
+				System.out.println("OMGGGGGGGGGGGG");
+			}
+			
 			storageService.store(file);
 			userService.setImage(file.getOriginalFilename(), username);
 			message = "You successfully uploaded " + file.getOriginalFilename() + "!";
@@ -129,6 +153,20 @@ public class UserApi {
 			System.out.println("doslo je do greske");
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
 		}
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/sendEmail")
+	public ResponseEntity<?> sendEmail(@RequestBody EmailDto emailDto) {
+		System.out.println("usao");
+
+		try {
+			emailService.sendMail(emailDto);
+			System.out.println("Nema greske b r e !");
+		} catch (MailException e) {
+			// TODO: handle exception
+			logger.info("Desila se greska "+e.getMessage());
+		}
+		return new ResponseEntity<Object>( HttpStatus.OK);
 	}
 
 }

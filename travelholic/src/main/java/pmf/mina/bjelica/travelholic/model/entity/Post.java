@@ -3,10 +3,10 @@ package pmf.mina.bjelica.travelholic.model.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,8 +36,11 @@ public class Post implements Serializable {
 	
 	private int amount;
 	
-	private String imageName;
-
+	//bi-directional many-to-one association to Photo
+	@JsonManagedReference
+	@OneToMany(mappedBy="post")
+	private List<Photo> photos;
+	
 	//bi-directional many-to-one association to Comment
 	@JsonManagedReference
 	@OneToMany(mappedBy="post",cascade= CascadeType.ALL)
@@ -45,7 +48,7 @@ public class Post implements Serializable {
 
 	//bi-directional many-to-many association to User
 	@JsonIgnore
-	@ManyToMany(mappedBy="posts1")
+	@ManyToMany(mappedBy="posts1",cascade= CascadeType.ALL)
 	private List<User> users;                           //ovo je ono ko je sve ovaj post dodao u omiljeno
 
 	//bi-directional many-to-one association to City
@@ -59,16 +62,6 @@ public class Post implements Serializable {
 	private User user;                                   //ovo je User koji je napisao post
 
 	public Post() {
-	}
-	
-	
-
-	public String getImageName() {
-		return imageName;
-	}
-
-	public void setImageName(String imageName) {
-		this.imageName = imageName;
 	}
 
 	public int getId() {
@@ -164,6 +157,18 @@ public class Post implements Serializable {
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
+
+	public List<Photo> getPhotos() {
+		if (photos == null)
+			photos = new ArrayList<>();
+		return photos;
+	}
+
+	public void setPhotos(List<Photo> photos) {
+		this.photos = photos;
+	}
+	
+	
 	
 	
 }

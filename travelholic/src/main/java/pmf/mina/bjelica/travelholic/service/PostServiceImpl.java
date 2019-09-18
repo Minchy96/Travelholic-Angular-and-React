@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import pmf.mina.bjelica.travelholic.dao.CityRepo;
 import pmf.mina.bjelica.travelholic.dao.CountryRepo;
+import pmf.mina.bjelica.travelholic.dao.PhotoRepository;
 import pmf.mina.bjelica.travelholic.dao.PostRepository;
 import pmf.mina.bjelica.travelholic.dao.UserRepository;
 import pmf.mina.bjelica.travelholic.model.dto.PostDto;
 import pmf.mina.bjelica.travelholic.model.dto.SearchDto;
 import pmf.mina.bjelica.travelholic.model.entity.City;
 import pmf.mina.bjelica.travelholic.model.entity.Country;
+import pmf.mina.bjelica.travelholic.model.entity.Photo;
 import pmf.mina.bjelica.travelholic.model.entity.Post;
 import pmf.mina.bjelica.travelholic.model.entity.User;
 
@@ -35,6 +37,9 @@ public class PostServiceImpl implements PostService {
 
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired
+	private PhotoRepository photoRepo;
 
 	@Override
 	public Post getPost(int id) {
@@ -62,7 +67,6 @@ public class PostServiceImpl implements PostService {
 			city = new City();
 			city.setCountry(country);
 			city.setName(postDto.getCity());
-			city.setZipcode(postDto.getZipcode());
 			city = cityRepo.save(city);
 		}
 		post.setCity(city);
@@ -90,6 +94,17 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public boolean delete(Integer postId) {
 		try {
+			
+			Post post = postRepo.getOne(postId);
+			for (Photo photo : post.getPhotos()) {
+				photoRepo.delete(photo);
+			}
+			for(User user : post.getUsers()) {
+				user.getPosts1().remove(post);
+				userRepo.saveAndFlush(user);
+			}
+			post.setUsers(null);
+			postRepo.saveAndFlush(post);
 			postRepo.deleteById(postId);
 			return true;
 		} catch (IllegalArgumentException e) {
@@ -153,7 +168,13 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public void saveImage(String originalFilename, Integer id) {
 		Post post = postRepo.getOne(id);
-		post.setImageName(originalFilename);
+		//post.setImageName(originalFilename);
+		Photo photo = new Photo();
+		photo.setName(originalFilename);
+		photo.setPost(post);
+		photo = photoRepo.saveAndFlush(photo);
+		
+		post.getPhotos().add(photo);
 		postRepo.saveAndFlush(post);
 	}
 

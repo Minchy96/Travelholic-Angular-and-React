@@ -10,7 +10,6 @@ public class PostDto {
 	private String  start;
 	private String end;
 	private String city;
-	private String zipcode;
 	private String country;
 	private String username;
 	private int amount;
@@ -55,9 +54,6 @@ public class PostDto {
 		return city;
 	}
 
-	public String getZipcode() {
-		return zipcode;
-	}
 
 	public String getCountry() {
 		return country;
@@ -81,10 +77,6 @@ public class PostDto {
 
 	public void setCity(String city) {
 		this.city = city;
-	}
-
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
 	}
 
 	public void setCountry(String country) {

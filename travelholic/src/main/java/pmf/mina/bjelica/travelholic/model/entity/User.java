@@ -59,15 +59,7 @@ public class User implements Serializable {
 	@JsonIgnore
 	private List<Post> posts2;
 
-	// bi-directional many-to-one association to Message
-	@OneToMany(mappedBy = "user")
-	private List<Message> messages;
 
-	// bi-directional many-to-many association to Chat
-	@ManyToMany
-	@JoinTable(name = "user_has_chat", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "Chat_id") })
-	private List<Chat> chats;
 
 	public User() {
 	}
@@ -208,33 +200,4 @@ public class User implements Serializable {
 		this.imageName = imageName;
 	}
 	
-	public List<Message> getMessages() {
-		return this.messages;
-	}
-	
-	public void setMessages(List<Message> messages) {
-		this.messages = messages;
-	}
-
-	public Message addMessage(Message message) {
-		getMessages().add(message);
-		message.setUser(this);
-
-		return message;
-	}
-
-	public Message removeMessage(Message message) {
-		getMessages().remove(message);
-		message.setUser(null);
-
-		return message;
-	}
-	
-	public List<Chat> getChats() {
-		return this.chats;
-	}
-
-	public void setChats(List<Chat> chats) {
-		this.chats = chats;
-	}
 }

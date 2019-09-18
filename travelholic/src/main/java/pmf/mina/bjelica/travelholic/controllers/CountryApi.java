@@ -16,7 +16,7 @@ import pmf.mina.bjelica.travelholic.service.CountryService;
 
 @Controller
 @RequestMapping(value="/country")
-@CrossOrigin(origins="http://localhost:4200")
+@CrossOrigin(origins="*")
 public class CountryApi {
 	
 	@Autowired
