@@ -1,0 +1,151 @@
+<div class="wrapper">
+    <div class="page-header page-header-small" filter-color="orange">
+        <div class="page-header-image rellax-header" data-rellax-speed="-8"
+            style="background-image: url('assets/img/bg5.jpg') ;">
+        </div>
+        <div class="container">
+            <div class="content-center">
+                <img [src]="image" *ngIf="image" class="rounded-circle" alt="" width="300px" height="300px">
+                <img src="../../assets/img/profile.png" *ngIf="!image" class="rounded-circle" alt="" width="300px"
+                    height="300px">
+                <h1 class="title">{{user?.firstName}} {{user?.lastName}}</h1>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="section">
+        <div class="container" style="top:-100px">
+            <div class="button-container">
+                <button type="button" class="btn btn-primary btn-round btn-lg" (click)="seeAbout()">
+                    About
+                </button>
+                <button type="button" *ngIf="viewProfile == username" class="btn btn-primary btn-round btn-lg"
+                    data-toggle="modal" data-target="#addPost">
+                    Add Post
+                </button>
+                <button type="button" *ngIf="viewProfile == username" class="btn btn-primary btn-round btn-lg"
+                    (click)="seeEditProfile()">
+                    Edit Profile
+                </button>
+
+                <button type="button" class="btn btn-primary btn-round btn-lg" (click)="posts()">
+                    See Posts
+                </button>
+
+                <button type="button" *ngIf="viewProfile == username" class="btn btn-primary btn-round btn-lg"
+                    (click)="seeFavourite()">
+                    Favourite posts
+                </button>
+                <button type="button" *ngIf="viewProfile != username" class="btn btn-primary btn-round btn-lg"
+                    data-toggle="modal" data-target="#sendEmail">
+                    Send email to {{ viewProfile }}
+                </button>
+            </div> <br><br><br>
+
+
+
+            <app-about *ngIf="about"> </app-about>
+            <app-edit-profile *ngIf="editProfile"></app-edit-profile>
+            <app-see-posts *ngIf="seePosts"></app-see-posts>
+            <app-favourite *ngIf="favourite"></app-favourite>
+
+
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="addPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="exampleModalLabel">New Post</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form [formGroup]="newPostForm">
+                                <input type="text" class="form-control" id="titlePost" placeholder="Title"
+                                    formControlName="title">
+                                <textarea class="form-control" aria-label="With textarea" placeholder="Description..."
+                                    formControlName="description"></textarea> <br>
+                                <input type="text" class="form-control" id="titlePost" placeholder="Amount"
+                                    formControlName="amount"> <br>
+
+                                <div class="form-inline">
+                                    <div class="form-group col-md-6">
+                                        Start: <input class="form-control datetimepicker" placeholder="06/07/2019"
+                                            name="dp1" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()"
+                                            formControlName="start">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        End: <input class="form-control datetimepicker" placeholder="06/07/2019"
+                                            name="dp2" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()"
+                                            formControlName="end">
+                                    </div>
+                                </div><br>
+
+                                <input type="text" class="form-control" id="titlePost" placeholder="City"
+                                    formControlName="city"> <br>
+                                <input type="text" class="form-control" id="titlePost" placeholder="Counrty"
+                                    formControlName="country">
+                                <div class="input-group form-group-no-border input-lg"
+                                    [ngClass]="{'input-group-focus':focus===true}">
+                                    <input style="display: none" type="file" (change)="onFileChange($event)" #fileInput>
+                                    <button type="submit" class="btn btn-primary btn-round" (click)="fileInput.click()">
+                                        Pick
+                                        image</button>
+                                </div>
+                            </form>
+                            <div *ngFor="let photo of priviewImages; index as img"> 
+                                    <img [src]="imageSrc"  *ngIf="img == 0 " width="200px" height="150px" alt="nije moguce prikazati sliku"> 
+                                <img [src]="photo"  *ngIf="img >= 1 " width="200px" height="150px" alt="nije moguce prikazati sliku"> 
+                                <button><span class="input-group-text" (click)="removeImage(img)"> Remove this image
+                                        <i class="now-ui-icons ui-1_simple-remove"
+                                           ></i>
+                                    </span></button>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" (click)="addPost()">Add post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="sendEmail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="exampleModalLabel">Send e-mail</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <form [formGroup]="emailForm">
+                                <textarea class="form-control" aria-label="With textarea"
+                                    placeholder="Type a message..." formControlName="text"></textarea> <br>
+
+                            </form>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" (click)="sendEmail()" data-dismiss="modal">
+                                Send </button>
+                            <button type="button" class="btn  btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

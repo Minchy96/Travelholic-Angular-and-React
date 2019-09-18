@@ -1,0 +1,75 @@
+<div class="page-header" filter-color="orange">
+    <div class="page-header-image" style="background-image:url(assets/img/login.jpg)"></div>
+    <div class="col-md-4 content-center">
+
+        <div class="card card-login card-plain">
+            <form [formGroup]="registrationForm">
+                <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+                    <input type="text" class="form-control" id="inputfirstName" placeholder="First Name"
+                        formControlName="firstName" />
+                </div>
+
+                <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+                    <input type="text" class="form-control" id="inputLastName" placeholder="Last Name"
+                        formControlName="lastName">
+                </div>
+
+                <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+                    <input type="text" class="form-control" id="inputEmail4" placeholder="Email"
+                        formControlName="email">
+                </div>
+
+                <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+                    <input class="form-control datetimepicker" placeholder="Birthday" name="dp" ngbDatepicker
+                        #d="ngbDatepicker" (click)="d.toggle()" formControlName="birthDate">
+                </div>
+
+                <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+                    <input type="text" class="form-control" id="inputUsername" placeholder="Username"
+                        formControlName="username">
+                </div>
+
+                <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+                    <input type="password" class="form-control" id="inputPassword4" placeholder="Password"
+                        formControlName="password">
+                </div>
+
+                <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+                    <input type="text" class="form-control" id="inputAddress" placeholder="Address"
+                        formControlName="address">
+                </div>
+
+                <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+                    <textarea class="form-control" aria-label="With textarea" formControlName="caption"
+                        placeholder="Caption"></textarea>
+                </div>
+
+                <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+                    <input style="display: none" type="file" (change)="onFileChange($event)" #fileInput>
+                    <button type="submit" class="btn btn-primary btn-round" (click)="fileInput.click()">
+                        Pick
+                        image</button>
+                </div>
+
+
+                <br>
+                <span *ngIf="uniqueUsername == false" class="badge badge-danger">Username must be unique </span>
+                <br>
+
+                <button 
+                    type="submit" 
+                    class="btn btn-primary btn-round btn-lg" 
+                    (click)="testUsername()">
+                    Create account
+                </button>
+                <br>
+                Already have an account?
+                <button type="submit" class="btn btn-primary btn-round btn-lg" [routerLink]="['']"
+                    routerLinkActive="router-link-active">Login</button>
+
+
+            </form>
+
+        </div>
+    </div>
+</div>

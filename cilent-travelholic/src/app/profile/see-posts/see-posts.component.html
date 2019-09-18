@@ -1,0 +1,101 @@
+<div class="row justify-content-center">
+    <div *ngFor="let post of posts ; let i=index" class="card">
+        <div class="card-body">
+            <div class="card">
+                <div class="card-body" style="background:rgba(0,0,0,0.01);">
+                    <div class="section-story-overview">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="row justify-content-center">
+                                    <div class="col-2"> </div>
+                                    <div class="col-8">
+                                        <ngb-carousel>
+                                            <ng-template ngbSlide *ngFor="let photo of post.photos; index as j">
+                                                <img class="d-block" src="{{postImages[i][j]}}" width="400px"
+                                                    height="230px" alt="First slide">
+                                                <div class="carousel-caption d-none d-md-block">
+                                                </div>
+                                            </ng-template>
+
+                                        </ngb-carousel>
+                                    </div>
+                                    <div class="col-2"></div>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#exampleModal" (click)="deletePost(post.id)"
+                                        *ngIf="username == otherUsername ">
+                                        Delete
+                                    </button>
+
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <h4>{{post.title}}</h4>
+                                <!-- First image on the right side, above the article -->
+                                <p>{{post.city.name}}, {{post.city.country.name}}</p>
+                                <p>{{post.description}}</p>
+                                <p>Cena putovanja je {{post.amount}} e.</p>
+                                <p>U periodu izmedju {{post.start}} - {{post.end}}.</p>
+                                <a [routerLink]="['/profile', post.user.username ]">
+                                    <h5 class="text-right">
+                                        {{post.user.firstName}} {{post.user.lastName}}</h5>
+                                </a>
+                                <div *ngFor="let comment of post.comments">
+                                    <div class="input-group form-group-no-border input-lg"
+                                        [ngClass]="{'input-group-focus':focus===true}">
+                                        <div class="form-inline">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"> <i
+                                                        class="now-ui-icons users_circle-08"></i></span>
+                                            </div>
+                                            <a [routerLink]="['/profile', comment.user.username ]">{{ comment.user.firstName }}
+                                                {{ comment.user.lastName }} </a>
+                                            <a> : {{ comment.text }} </a>
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="now-ui-icons ui-1_simple-remove"
+                                                        (click)="removeComm(comment.id)"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form [formGroup]="commentForm">
+                                    <input type="text" class="form-control" id="inputComm" placeholder="Comment"
+                                        formControlName="text">
+                                    <button type="submit" class="btn btn-primary btn-round "
+                                        (click)="addComment(post.id)">Comment</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete post</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" (click)="deletePost(post.id)"
+                            data-dismiss="modal">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

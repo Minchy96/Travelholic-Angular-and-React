@@ -1,0 +1,53 @@
+<br /><br /><br /><br /><br /><br />
+
+<div *ngFor="let post of posts">
+    <div class="section-story-overview">
+        <div class="row">
+            <div class="col-md-6">
+
+                <div class="row justify-content-center">
+                    <div class="col-2"> </div>
+                    <div class="col-8">
+                        <ngb-carousel>
+                            <ng-template ngbSlide *ngFor="let photo of post.photos">
+                                <img class="d-block" src="assets/img/bg1.jpg" alt="First slide">
+                                <div class="carousel-caption d-none d-md-block">
+                                </div>
+                            </ng-template>
+
+                        </ngb-carousel>
+                    </div>
+                    <div class="col-2"></div>
+                    <button type="button" class="btn btn-primary btn-round btn-lg" (click)="favoutire(post.id)">
+                        <i class="now-ui-icons objects_diamond"></i> Add to Favourite</button>
+
+
+                </div>
+            </div>
+            <div class="col-md-5">
+                <!-- First image on the right side, above the article -->
+                <h3>{{post.city.name}}, {{post.city.country.name}}</h3>
+                <p>{{post.description}}</p>
+                <p>Cena putovanja je {{post.amount}} e.</p>
+                <p>U periodu izmedju {{post.start}} - {{post.end}}.</p>
+
+                <div *ngFor="let comment of post.comments">
+                    <div class="input-group form-group-no-border input-lg"
+                        [ngClass]="{'input-group-focus':focus===true}">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="now-ui-icons users_circle-08"></i></span>
+                        </div>
+                        <a [routerLink]="['/profile', comment.user.username ]">{{ comment.user.firstName }}
+                            {{ comment.user.lastName }}</a>
+                        <p>{{comment.text}}</p>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="now-ui-icons users_circle-08"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <input type="text" class="form-control" id="inputComm" placeholder="Comment">
+                <button type="submit" class="btn btn-primary btn-round " (click)="addComment(post.id)">Comment</button>
+            </div>
+        </div>
+    </div>
+</div>

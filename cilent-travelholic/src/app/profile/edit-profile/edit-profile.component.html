@@ -1,0 +1,75 @@
+<div id="inputs">
+    <form [formGroup]="ediProfileForm">
+        <div class="row">
+            <div class="form-group col-md-2">
+                <h5 class="description">First name:</h5>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="inputfirstName" formControlName="firstName">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-2">
+                <h5 class="description">Last name:</h5>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="inputLastName" formControlName="lastName">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-2">
+                <h5 class="description">Caption:</h5>
+            </div>
+            <div class="form-group col-md-6">
+                <textarea class="form-control" aria-label="With textarea" formControlName="caption"></textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-2">
+                <h5 class="description">Email:</h5>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="inputEmail4" formControlName="email"
+                    placeholder="New Password">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-2">
+                <h5 class="description">Username:</h5>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="inputUsername" formControlName="username">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-2">
+                <h5 class="description">Password:</h5>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="password" class="form-control" id="inputPassword4" formControlName="password">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-2">
+                <h5 class="description">Address:</h5>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="inputAddress" formControlName="address">
+            </div>
+        </div>
+
+        <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+            <input style="display: none" type="file" (change)="onFileChange($event)" #fileInput>
+            <button type="submit" class="btn btn-primary btn-round" (click)="fileInput.click()"> Change
+                image</button>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary" (click)="update()">Save</button>
+    </form>
+</div>
