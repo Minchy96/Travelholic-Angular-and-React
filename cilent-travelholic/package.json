@@ -21,7 +21,7 @@
     "@angular/router": "~8.0.1",
     "@ng-bootstrap/ng-bootstrap": "^4.2.1",
     "bootstrap": "^4.0.0-alpha.6",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jw-bootstrap-switch-ng2": "^2.0.5",
     "ng2-nouislider": "^1.8.2",
     "nouislider": "^13.1.5",
